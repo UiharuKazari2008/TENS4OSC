@@ -3,6 +3,9 @@ DIY Controllable TENS Stimulator for VRChat Avatars via OSC
 
 <img src="https://github.com/UiharuKazari2008/TENS4OSC/assets/15165770/eae91475-7a30-4f0c-b10a-061e04670fee" height=400px/>
 
+## CAUTION
+I am not responsible for if you suffer serious side effects or harm, Your an adult if you are even thinking about using TENS/EMS for activities please read the warnines with the device and do not put the electrides near your heart or sensitive skin. Do not keep the device attached to a PC when active and its suggested that you use a battery to prevent the possibliity of being connected to your AC ground. If you must use a USB isolator.
+
 ## Use Case
 - ERP
 - .... I don't know
