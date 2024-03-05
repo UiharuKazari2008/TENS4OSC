@@ -1,4 +1,3 @@
-#define ARDUINOOSC_DEBUGLOG_ENABLE
 #include <ArduinoOSCWiFi.h>
 #include "WiFi.h"
 
@@ -14,7 +13,8 @@
 
 #define M_PRESS_TIME_FOR_C 8 // Number of presses to enter continuous timer
 
-#define BUTTON_DEBOUNCE_DELAY 45 // Your devices button minimum wait time in ms for its debouncer
+#define BUTTON_DEBOUNCE_PRESS 45 // Your devices button minimum to press buttonin ms for its debouncer
+#define BUTTON_DEBOUNCE_DELAY 50 // Your devices button minimum wait time in ms for its debouncer
 
 // Stop / Disconnect Relays
 #define CHANNEL_A_RELAY 16
@@ -34,7 +34,7 @@ const char * password = "Radio Noise AX";
 int Current_Level = 0;
 int TENS_Level = 0;
 bool Current_Active = false;
-bool TENS_Active = false;
+bool TENS_Active = true;
 bool TENS_ESTOP = true;
 int Last_Command = 0;
 int ActiveCommand = 0;
@@ -94,7 +94,7 @@ void setup() {
   for (int i = 0; i < M_PRESS_TIME_FOR_C; i++) {
     digitalWrite(TIME_BUTTON, HIGH);
     digitalWrite(TIME_BUTTON, LOW);
-    delay(BUTTON_DEBOUNCE_DELAY);
+    delay(BUTTON_DEBOUNCE_PRESS);
     digitalWrite(TIME_BUTTON, HIGH);
     delay(BUTTON_DEBOUNCE_DELAY);
   }
@@ -150,7 +150,6 @@ void checkWiFiConnection() {
 
 void loop() {
   checkWiFiConnection();
-  OscWiFi.update();
 }
 
 void inputLoop( void * pvParameters ) {
@@ -168,7 +167,7 @@ void inputLoop( void * pvParameters ) {
         Pause_Commands = true;
         digitalWrite(PUP_BUTTON, HIGH);
         digitalWrite(PUP_BUTTON, LOW);
-        delay(BUTTON_DEBOUNCE_DELAY);
+        delay(BUTTON_DEBOUNCE_PRESS);
         digitalWrite(PUP_BUTTON, HIGH);
         Current_Level = 0;
         delay(BUTTON_DEBOUNCE_DELAY);
@@ -177,7 +176,7 @@ void inputLoop( void * pvParameters ) {
         Pause_Commands = true;
         digitalWrite(PDOWN_BUTTON, HIGH);
         digitalWrite(PDOWN_BUTTON, LOW);
-        delay(BUTTON_DEBOUNCE_DELAY);
+        delay(BUTTON_DEBOUNCE_PRESS);
         digitalWrite(PDOWN_BUTTON, HIGH);
         Current_Level = 0;
         delay(BUTTON_DEBOUNCE_DELAY);
@@ -190,7 +189,7 @@ void inputLoop( void * pvParameters ) {
         for (int i = 0; i < MAX_INTENSITY; i++) {
           digitalWrite(DOWN_BUTTON, HIGH);
           digitalWrite(DOWN_BUTTON, LOW);
-          delay(BUTTON_DEBOUNCE_DELAY);
+          delay(BUTTON_DEBOUNCE_PRESS);
           digitalWrite(DOWN_BUTTON, HIGH);
           delay(BUTTON_DEBOUNCE_DELAY);
         }
@@ -255,7 +254,7 @@ void inputLoop( void * pvParameters ) {
                   Pause_Commands = true;
                   digitalWrite(PUP_BUTTON, HIGH);
                   digitalWrite(PUP_BUTTON, LOW);
-                  delay(BUTTON_DEBOUNCE_DELAY);
+                  delay(BUTTON_DEBOUNCE_PRESS);
                   digitalWrite(PUP_BUTTON, HIGH);
                   Current_Level = 0;
                   delay(BUTTON_DEBOUNCE_DELAY);
@@ -264,7 +263,7 @@ void inputLoop( void * pvParameters ) {
                   Pause_Commands = true;
                   digitalWrite(PDOWN_BUTTON, HIGH);
                   digitalWrite(PDOWN_BUTTON, LOW);
-                  delay(BUTTON_DEBOUNCE_DELAY);
+                  delay(BUTTON_DEBOUNCE_PRESS);
                   digitalWrite(PDOWN_BUTTON, HIGH);
                   Current_Level = 0;
                   delay(BUTTON_DEBOUNCE_DELAY);
@@ -291,6 +290,7 @@ unsigned long startOp = 0;
 unsigned long previousMillis = 0;
 void outputLoop( void * pvParameters ) {
   for(;;) {
+    OscWiFi.update();
     if (TENS_ESTOP == true && Current_Active == true) {
       digitalWrite(CHANNEL_A_RELAY, RELAY_OFF_STATE);
       digitalWrite(CHANNEL_B_RELAY, RELAY_OFF_STATE);
@@ -308,14 +308,16 @@ void outputLoop( void * pvParameters ) {
         if (startOp == 0) {
           startOp = millis();
         }
-        digitalWrite(UP_BUTTON, HIGH);
-        digitalWrite(UP_BUTTON, LOW);
-        delay(BUTTON_DEBOUNCE_DELAY);
-        digitalWrite(UP_BUTTON, HIGH);
-        delay(BUTTON_DEBOUNCE_DELAY);
-        Current_Level++;
-        Serial.print("LEVEL (+) ");
-        Serial.println(Current_Level);
+        while (Current_Level < TENS_Level) {
+          digitalWrite(UP_BUTTON, HIGH);
+          digitalWrite(UP_BUTTON, LOW);
+          delay(BUTTON_DEBOUNCE_PRESS);
+          digitalWrite(UP_BUTTON, HIGH);
+          delay(BUTTON_DEBOUNCE_DELAY);
+          Current_Level++;
+          Serial.print("LEVEL (+) ");
+          Serial.println(Current_Level);
+        }
         if (Current_Level == TENS_Level && startOp != 0) {
           Serial.print("LEVEL (=) ");
           long completed = (millis() - startOp);
@@ -326,14 +328,16 @@ void outputLoop( void * pvParameters ) {
         if (startOp == 0) {
           startOp = millis();
         }
-        digitalWrite(DOWN_BUTTON, HIGH);
-        digitalWrite(DOWN_BUTTON, LOW);
-        delay(BUTTON_DEBOUNCE_DELAY);
-        digitalWrite(DOWN_BUTTON, HIGH);
-        delay(BUTTON_DEBOUNCE_DELAY);
-        Current_Level--;
-        Serial.print("LEVEL (-) ");
-        Serial.println(Current_Level);
+        while (Current_Level > TENS_Level) {
+          digitalWrite(DOWN_BUTTON, HIGH);
+          digitalWrite(DOWN_BUTTON, LOW);
+          delay(BUTTON_DEBOUNCE_PRESS);
+          digitalWrite(DOWN_BUTTON, HIGH);
+          delay(BUTTON_DEBOUNCE_DELAY);
+          Current_Level--;
+          Serial.print("LEVEL (-) ");
+          Serial.println(Current_Level);
+        }
         if (Current_Level == TENS_Level && startOp != 0) {
           Serial.print("LEVEL (=) ");
           long completed = (millis() - startOp);
@@ -353,11 +357,11 @@ void outputLoop( void * pvParameters ) {
       delay(1);
     }
     // Keep Device Alive
-    if (millis() - previousMillis >= 5000) {
+    if (millis() - previousMillis >= 3000) {
       previousMillis = millis();
       digitalWrite(POWER_BUTTON, HIGH);
       digitalWrite(POWER_BUTTON, LOW);
-      delay(BUTTON_DEBOUNCE_DELAY);
+      delay(BUTTON_DEBOUNCE_PRESS);
       digitalWrite(POWER_BUTTON, HIGH);
       delay(BUTTON_DEBOUNCE_DELAY);
     }
