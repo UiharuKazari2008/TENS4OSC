@@ -44,14 +44,14 @@ DIY Controllable TENS Stimulator for VRChat Avatars via OSC
 ## Implimentation
 * Use VRCOSC to route the output from VRChat to your devices IP Address @ Port 9001
 * Add the 4 Parameters
-  * TENS_Level (INT)
-  * TENS_Active (BOOL)
-  * TENS_ESTOP (BOOL)
-  * ActiveCommand (INT) (Not Required)
+  * TENSLevel (INT)
+  * TENSActive (BOOL)
+  * TENSESTOP (BOOL)
+  * KACommand (INT) (Not Required)
 
-Animate the TENS_Level to set the intensity, Animate the TENS_Active Bool to turn the output on or off (if your jumping to higher levels or need sudden output
+Animate the TENSLevel to set the intensity, Animate the TENSActive Bool to turn the output on or off (if your jumping to higher levels or need sudden output
 
-Use TENS_ESTOP as a Menu Toggle to Toggle Master Output, Add ActiveCommand Buttons to your meun to send commands like bellow
+Use TENSESTOP as a Menu Toggle to Toggle Master Output, Add KACommand Buttons to your meun to send commands like bellow
 * 51: Preset Up
 * 50: Preset Down
 * 54: Resync Intensity
