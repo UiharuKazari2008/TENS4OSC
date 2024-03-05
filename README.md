@@ -41,6 +41,9 @@ DIY Controllable TENS Stimulator for VRChat Avatars via OSC
 #define MAX_INTENSITY 30
 ```
 
+## Known Issues
+* If you swing your from values to quickly there is tendicy for it to get out of sync (Low then expected thankfully)
+
 ## Implimentation
 * Use VRCOSC to route the output from VRChat to your devices IP Address @ Port 9001
 * Add the 4 Parameters
