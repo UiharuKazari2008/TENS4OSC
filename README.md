@@ -1,7 +1,7 @@
 # TENS4OSC
 DIY Controllable TENS Stimulator for VRChat Avatars via OSC
 
-![IMG_0172](https://github.com/UiharuKazari2008/TENS4OSC/assets/15165770/dcdab399-0a0b-4a91-86e4-317cf9ab32da)
+<img src="https://github.com/UiharuKazari2008/TENS4OSC/assets/15165770/eae91475-7a30-4f0c-b10a-061e04670fee" height=400px/>
 
 ## Use Case
 - ERP
@@ -12,6 +12,7 @@ DIY Controllable TENS Stimulator for VRChat Avatars via OSC
 - 2 Relays
 - AVCOO TENS Stimulator kit from Amazon
 
+![IMG_0172](https://github.com/UiharuKazari2008/TENS4OSC/assets/15165770/dcdab399-0a0b-4a91-86e4-317cf9ab32da)
 ![IMG_0171](https://github.com/UiharuKazari2008/TENS4OSC/assets/15165770/56e6868c-d0cc-4681-bcf2-6c88fa22e7c4)
 
 * Not Shown, Relays break output + channels. If possible use 2 relays for both positive and nagative
