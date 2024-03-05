@@ -18,6 +18,9 @@ DIY Controllable TENS Stimulator for VRChat Avatars via OSC
 * Not Shown, Relays break output + channels. If possible use 2 relays for both positive and nagative
 
 ```c
+
+#define DEFAULT_OFF // Device is off by default
+
 // Remove unused buttons to remove the feature
 #define POWER_BUTTON 19 // Power Button
 #define UP_BUTTON 18    // Intensity Up (REQUIRED)
@@ -28,7 +31,8 @@ DIY Controllable TENS Stimulator for VRChat Avatars via OSC
 
 #define M_PRESS_TIME_FOR_C 8 // Number of presses to enter continuous timer
 
-#define BUTTON_DEBOUNCE_DELAY 45 // Your devices button minimum wait time in ms for its debouncer
+#define BUTTON_DEBOUNCE_PRESS 45 // Your devices button minimum to press buttonin ms for its debouncer
+#define BUTTON_DEBOUNCE_DELAY 50 // Your devices button minimum wait time in ms for its debouncer
 
 // Stop / Disconnect Relays
 #define CHANNEL_A_RELAY 16
@@ -40,6 +44,10 @@ DIY Controllable TENS Stimulator for VRChat Avatars via OSC
 
 // Max Intensivty Level supported by your device
 #define MAX_INTENSITY 30
+
+// WiFi Connection
+const char * ssid = "Radio Noise AX";
+const char * password = "Radio Noise AX";
 ```
 
 ## Known Issues
